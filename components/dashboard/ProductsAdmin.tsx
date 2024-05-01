@@ -50,23 +50,25 @@ const ProductsAdmin = () => {
     }
   };
 
-  const updateProduct = async (updatedProduct: Product) => {
+ const updateProduct = async (product: Product) => {
+  const { isEditing, ...productData } = product; 
+
   const res = await fetch(`/api/products/update`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(updatedProduct),
+    body: JSON.stringify(productData), 
   });
-  if (res.ok) {
+
+    if (res.ok) {
     const updated = await res.json();
-    setProducts(products.map(product => product.id === updatedProduct.id ? { ...updated, isEditing: false } : product));
+    console.log('Failed to update product');
+    setProducts(products.map(p => p.id === product.id ? { ...updated, isEditing: false } : p));
   } else {
     console.error('Failed to update product');
   }
 };
-
-  
 
   const deleteProduct = async (id: string) => {
     const res = await fetch('/api/products/delete', {
@@ -76,10 +78,10 @@ const ProductsAdmin = () => {
       },
       body: JSON.stringify(id),
     });
-    if (res.ok) {
+      if (res.ok) {
       setProducts(products.filter(product => product.id !== id));
     } else {
-      res.text().then(data => alert(data))
+      console.error('Failed to delete product');
     }
   };
 
@@ -93,12 +95,12 @@ const ProductsAdmin = () => {
 
   return (
     <div className="p-5">
-      <h1 className="text-2xl font-semibold text-gray-700 mb-5">Product Management</h1>
+      <h1 className="text-2xl font-semibold mb-5 text-white">Product Management</h1>
       
       {/* Add Product Form */}
-      <div className="mb-10">
-        <h2 className="text-xl font-semibold text-gray-600 mb-4">Add a New Product</h2>
-        <div className="flex gap-4 mb-4">
+      <div className="mb-10 ">
+        <h2 className="text-xl font-semibold  mb-4 text-white">Add a New Product</h2>
+        <div className="flex gap-4 mb-4 text-gray-600">
           <input
             type="text"
             value={newProduct.name}

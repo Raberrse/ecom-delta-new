@@ -9,6 +9,12 @@ export async function DELETE(req: NextRequest) {
         await prisma.products.delete({
           where: { id: id },
         });
+        return new NextResponse(JSON.stringify(id)), {
+            status: 201,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
     } catch (error) {
         return new NextResponse(JSON.stringify({ error: "Failed to create product" }), {
             status: 500,
