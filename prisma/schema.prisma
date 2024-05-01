@@ -278,7 +278,6 @@ model users {
   identities                  identities[]
   mfa_factors                 mfa_factors[]
   sessions                    sessions[]
-  carts                       carts[]
   orders                      orders[]
 
   @@index([instance_id])
@@ -293,18 +292,6 @@ model products {
   image_url   String?
   price       Decimal @db.Decimal(6, 2)
   category    String  @db.VarChar(255)
-  carts       carts[]
-
-  @@schema("public")
-}
-
-model carts {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id    String    @db.Uuid
-  product_id String?   @db.Uuid
-  quantity   Int
-  products   products? @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users      users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@schema("public")
 }
